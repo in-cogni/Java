@@ -1,12 +1,21 @@
 void main() {
-    /*Cat cat = new Cat();
-    cat.name = "Barsik";
-    cat.eat();
-    cat.meow();
-
-    Animal animal = new Cat();//создается кот
-    animal.eat();*/
-
-    Animal cat = new Cat();
-    cat.sleep();
+    /*Animal[] animals = {
+            new Cat(),
+            new Dog()
+    };
+    Animal animal1 = new Cat();
+    Animal animal2 = new Dog();
+    animal1.makeSound();
+    animal2.makeSound();
+    for(Animal animal: animals){
+        animal.makeSound();
+    }*/
+    Animal animals = new Cat();
+    /*if(animals instanceof Cat){
+        ((Cat) animals).play();
+    }*/
+    animals.makeSound("Gav");
+    animals.printAll("Hello");
+    animals.printAll("Hello", "Cat");
+    animals.printAll("Hello", "Cat", "Dog");
 }
