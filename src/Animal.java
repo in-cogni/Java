@@ -1,25 +1,12 @@
-public class Animal {
+public abstract class Animal {
+    protected String name;
 
-    void makeSound(){
-        System.out.println("Some sound");
+    public Animal(String name){
+        this.name = name;
     }
+    public abstract void makeSound();
 
-    void makeSound(String name){
-        System.out.println("Some sound "+name);
-    }
-
-    /*void sleep(){
-        System.out.println("Animal is sleep");
-        makeSound();
-    }
-
-    void eat(){
-        System.out.println("Кушает");
-    }*/
-
-    void printAll(String... messages){
-        for(String msg: messages){
-            System.out.println(msg);
-        }
+    public void sleep(){//обычный метод
+        System.out.println(name+"ZZZZ");
     }
 }
