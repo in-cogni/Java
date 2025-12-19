@@ -1,24 +1,18 @@
-
 void main() {
-    Circle circle = new Circle();
-    Rectangle rectangle = new Rectangle();
-    Shape shape = new Shape();
+    //1
+    List<ZooAnimal> animals = new ArrayList<>();
+    animals.add(new Elephant("Слон"));
+    animals.add(new Monkey("Обезьяна"));
 
-    circle.setRadius(2.0);
-    rectangle.setWidthHeight(3.0, 1.0);
-
-    Shape[] shapes = {
-            circle,
-            rectangle,
-            shape
-    };
-
-    for(Shape s: shapes){
-        System.out.println("Площадь: " + s.area());
+    for(ZooAnimal animal: animals){
+        animal.makeSound();
     }
-
-    ShapeUtils shapeUtils = new ShapeUtils();
-    shapeUtils.printArea(circle);
-    shapeUtils.printArea(rectangle);
-    shapeUtils.printArea(shape);
+    //2
+    List<Notification> notifications = new ArrayList<>();
+    notifications.add(new EmailNotification("Вася", "vasya@yandex.ru"));
+    notifications.add(new PushNotification("Вася","192.168.0.66"));
+    for(Notification notification: notifications){
+        notification.printInfo();
+        notification.send();
+    }
 }
