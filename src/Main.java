@@ -1,18 +1,19 @@
 void main() {
     //1
-    List<ZooAnimal> animals = new ArrayList<>();
-    animals.add(new Elephant("Слон"));
-    animals.add(new Monkey("Обезьяна"));
+    List<Playable> list = new ArrayList<>();
+    list.add(new MusicPlayer());
+    list.add(new VideoPlayer());
 
-    for(ZooAnimal animal: animals){
-        animal.makeSound();
+    for(Playable playable: list){
+        playable.play();
     }
     //2
-    List<Notification> notifications = new ArrayList<>();
-    notifications.add(new EmailNotification("Вася", "vasya@yandex.ru"));
-    notifications.add(new PushNotification("Вася","192.168.0.66"));
-    for(Notification notification: notifications){
-        notification.printInfo();
-        notification.send();
-    }
+    List<Validator> validators = new ArrayList<>();
+    validators.add(new EmailValidator());
+    validators.add(new PasswordValidator());
+
+    System.out.println("Email 'string': "+validators.get(0).isValid("string"));//false
+    System.out.println("Email 'string@tut.ru': "+validators.get(0).isValid("string@tut.ru"));//true
+    System.out.println("Password '9ij j': "+validators.get(1).isValid("9ij j"));//false
+    System.out.println("Password '09oijkKh': "+validators.get(1).isValid("09oijkKh"));//true
 }
