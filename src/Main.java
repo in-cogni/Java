@@ -1,32 +1,34 @@
 void main() {
     //1
-    User user1 = new User("User1", 8);
-    User user2 = new User("User2", 40);
-    System.out.println(user1.equals(user2));
-    System.out.println(user1);
+    String text = "This is the text. It is very entertaining. The end.";
+    Map<String, Integer> words = new HashMap<>();
+    String newText = text.toLowerCase(Locale.ROOT);
+    String[] wordsArr = newText.split("[^a-z]+");
+
+    for(String word: wordsArr){
+        if(!word.isEmpty()){
+            words.put(word, words.getOrDefault(word, 0)+1);
+        }
+    }
+
+    Map<String, Integer> sorted = new TreeMap<>(words);
+
+    System.out.println("Уникальные слова: ");
+    for(String name: sorted.keySet()){
+        System.out.print(name+" ");
+    }
+    System.out.println("\nКоличество уникальных слов: "+sorted.size());
+    System.out.println(words);
 
     //2
-    Product product = new Product("product", 100.0);
-    System.out.println(product);
+    Storage<String> storageString = new Storage<>();
+    storageString.add("Petya");
+    storageString.add("Vasya");
+    storageString.add("Dilan");
+    System.out.println(storageString.statistics());
+    System.out.println(storageString.remove("Petya"));
+    System.out.println(storageString.remove("Va"));
+    System.out.println(storageString.statistics());
+    System.out.println(storageString.getHistory());
 
-    try {
-        Product product1 = new Product("", 10.0);
-    } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage());
-    }
-
-    try {
-        Product product2 = new Product("product2", -10.0);
-    } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage());
-    }
-
-    //3
-    List<OrderItem> list = new ArrayList<>();
-    list.add(new OrderItem("product1", 10, 24.0));
-    list.add(new OrderItem("product2", 4, 40.0));
-    list.add(new OrderItem("product3", 8, 2.0));
-
-    System.out.println("Общая стоимость: " + list.stream().mapToDouble(OrderItem::totalPrice).sum());
-    System.out.println("Товар с максимальной суммой: "+ list.stream().max(Comparator.comparingDouble(OrderItem::totalPrice)).get());
 }
