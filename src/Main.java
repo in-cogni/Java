@@ -1,44 +1,94 @@
+import com.sun.source.tree.Tree;
+
 void main() {
-    /*Product client1 = new Product("Victor", 25);
-    Product client = new Product("Victor", 25);
-    System.out.println(client.name());
-    System.out.println(client.price());
-    System.out.println(client);
-    System.out.println(client.equals(client1));
-    System.out.println(client.hashCode() == client1.hashCode());
-    System.out.println(client);*/
+    //без коллекции
+    /*String [] students = new String[3];
+    students[0]="";
+    students[1]="";
+    students[2]="";
 
-    /*Map<Product, String> clients = new HashMap<>();
-    clients.put(new Product("Anna", 25), "VIP");
-    System.out.println(clients.get(new Product("Anna", 25)));*/
+    String[] newS = new String[4];
+    for(int i = 0;i< students.length; i++){
+        newS[i]=students[i];
+    }
+    newS[3]="";
+    students=newS;*/
 
-    /*int[] arr = {1, 2, 3};
-    int[] copy = Arrays.copyOf(arr, arr.length);
-    DataHolder dataHolder = new DataHolder(arr);
-    arr[0]=99;
-    System.out.println(dataHolder.data()[0]);*/
+    //коллекция
+    /*List<String> students = new ArrayList<>();
+    students.add("vasya");
+    students.add("anna");
+    students.add(1, "petya");
 
-    /*record PointA(int a, int b){}
-    Map<PointA, String> map = new HashMap<>();*/
+    System.out.println(students);
+    String first = students.get(0);
+    students.set(1, "Pavel");
+    students.remove("Anna");
+    System.out.println(students.size());*/
 
-    /*Map<Point, String> map = new HashMap<>();
-    Point p1 = new Point(3, 4);
-    map.put(p1, "Hello");
-    Point p2 = new Point(3, 4);
-    System.out.println(map.get(p2));*/
+    /*List<String> students = new LinkedList<>();
+    students.add("vasya");
+    students.add("anna");
+    students.add(1, "petya");
+    System.out.println(students);
+    students.remove(1);
+    System.out.println(students);*/
 
-    Point p1 = new Point(0, 0);
-    Point p2 = new Point(3, 4);
-    Point p3 = new Point(2, 4);
+    Map<String, Integer> ages = new HashMap<>();
+    ages.put("Vasya", 25);
+    ages.put("Petya", 5);
+    ages.put("Masha", 22);
 
-    System.out.println(p1.equals(p3));
-    System.out.println(p1.equals(p2));
+    int age = ages.get("Vasya");
+    System.out.println(age);
 
-    System.out.println(p1.hashCode());
-    System.out.println(p2.hashCode());
-    System.out.println(p3.hashCode());
+    if (ages.containsKey("Masha")) {
+        System.out.println("Masha is here");
+    }
+    ages.remove("Petya");
+    for (String name : ages.keySet()) {
+        System.out.println(name + ": " + ages.get(name));
+    }
 
-    System.out.println(p3);
+    for (Map.Entry<String, Integer> entry : ages.entrySet()) {
 
-    System.out.println(p1.distanceTo(p2));
+    }
+
+    //Map<String, Integer> ages = new TreeMap<>();//хранит элементы в отсортированном порядке по ключу
+
+    /*Set<String> guests = new HashSet<>();
+    guests.add("Anton");
+    guests.add("Yaroslav");
+    guests.add("Luca");
+    guests.add("Boris");
+    guests.add("Max");
+    for(String task: guests){
+        System.out.println("- "+task);
+    }*/
+
+    Set<String> guests = new TreeSet<>();
+    guests.add("Anton");
+    guests.add("Yaroslav");
+    guests.add("Luca");
+    guests.add("Boris");
+    guests.add("Max");
+    for (String task : guests) {
+        System.out.println("- " + task);
+    }
+
+    /*List list = new ArrayList();//без дженериков
+    list.add("Privet");
+    list.add(42);
+    list.add(new Object());
+
+    String s = (String) list.get(1);//error
+    System.out.println(s);*/
+
+    List<String> list = new ArrayList<>();//с дженериками
+    list.add("Privet");
+
+    Box<String> stringBox = new Box<>();
+    System.out.println(stringBox.get());
+
+    Box<Integer> integerBox = new Box<>();
 }
