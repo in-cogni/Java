@@ -1,94 +1,91 @@
-import com.sun.source.tree.Tree;
-
 void main() {
-    //без коллекции
-    /*String [] students = new String[3];
-    students[0]="";
-    students[1]="";
-    students[2]="";
-
-    String[] newS = new String[4];
-    for(int i = 0;i< students.length; i++){
-        newS[i]=students[i];
-    }
-    newS[3]="";
-    students=newS;*/
-
-    //коллекция
-    /*List<String> students = new ArrayList<>();
-    students.add("vasya");
-    students.add("anna");
-    students.add(1, "petya");
-
-    System.out.println(students);
-    String first = students.get(0);
-    students.set(1, "Pavel");
-    students.remove("Anna");
-    System.out.println(students.size());*/
-
-    /*List<String> students = new LinkedList<>();
-    students.add("vasya");
-    students.add("anna");
-    students.add(1, "petya");
-    System.out.println(students);
-    students.remove(1);
-    System.out.println(students);*/
-
-    Map<String, Integer> ages = new HashMap<>();
-    ages.put("Vasya", 25);
-    ages.put("Petya", 5);
-    ages.put("Masha", 22);
-
-    int age = ages.get("Vasya");
-    System.out.println(age);
-
-    if (ages.containsKey("Masha")) {
-        System.out.println("Masha is here");
-    }
-    ages.remove("Petya");
-    for (String name : ages.keySet()) {
-        System.out.println(name + ": " + ages.get(name));
-    }
-
-    for (Map.Entry<String, Integer> entry : ages.entrySet()) {
-
-    }
-
-    //Map<String, Integer> ages = new TreeMap<>();//хранит элементы в отсортированном порядке по ключу
-
-    /*Set<String> guests = new HashSet<>();
-    guests.add("Anton");
-    guests.add("Yaroslav");
-    guests.add("Luca");
-    guests.add("Boris");
-    guests.add("Max");
-    for(String task: guests){
-        System.out.println("- "+task);
+    /*List<User> users = new ArrayList<>();
+    List<String> userList = new ArrayList<>();
+    for(User user: users){
+        if(user.getAge()>18){
+            userList.add(user.getName());
+        }
     }*/
+    /*List<User> users = new ArrayList<>();
+    List<String> userList = users.stream()
+            .filter(user -> user.getAge()>=18)
+            .map(User::getName)
+            .collect(Collectors.toList());*/
 
-    Set<String> guests = new TreeSet<>();
-    guests.add("Anton");
-    guests.add("Yaroslav");
-    guests.add("Luca");
-    guests.add("Boris");
-    guests.add("Max");
-    for (String task : guests) {
-        System.out.println("- " + task);
-    }
+    /*List<String> names = List.of("Anna", "Boris", "Elena", "Alina");
+    Stream<String> stream = names.stream();
 
-    /*List list = new ArrayList();//без дженериков
-    list.add("Privet");
-    list.add(42);
-    list.add(new Object());
+    int[] nam = {1,2,3,4,5};
+    IntStream intStream = Arrays.stream(nam);*/
 
-    String s = (String) list.get(1);//error
-    System.out.println(s);*/
+    List<String> names = List.of("Anna", "Boris", "Elena", "Alina", "Elena");
+    List<Integer> numbers = List.of(1, 2, 3, 4, 5);
 
-    List<String> list = new ArrayList<>();//с дженериками
-    list.add("Privet");
+    List<Integer> evenNum = numbers.stream()
+            .filter(n -> n % 2 == 0)
+            .collect(Collectors.toList());
+    System.out.println(evenNum);
+    List<String> evenNames = names.stream()
+            .filter(name -> name.startsWith("A"))
+            .collect(Collectors.toList());
+    System.out.println(evenNames);
+    List<Integer> evenName = names.stream()
+            .map(name -> name.length())
+            .collect(Collectors.toList());
+    System.out.println(evenName);
+    List<String> evenNameUp = names.stream()
+            .map(name -> name.toUpperCase())
+            .collect(Collectors.toList());
+    System.out.println(evenNameUp);
+    String evenNameU = names.stream()
+            .map(name -> name.toUpperCase())
+            .collect(Collectors.joining(", "));
+    System.out.println(evenNameU);
+    List<Integer> evenN = names.stream()
+            .filter(name->name.startsWith("A"))
+            .map(String::length)
+            .collect(Collectors.toList());
+    System.out.println(evenN);
 
-    Box<String> stringBox = new Box<>();
-    System.out.println(stringBox.get());
+    List<String> unique = names.stream()
+            .distinct()
+            .collect(Collectors.toList());
+    System.out.println(unique);
 
-    Box<Integer> integerBox = new Box<>();
+    List<User> users =  List.of(
+            new User("Anna", "ann@gmail.com"),
+            new User("Joe", "1joe3@gmail.com"),
+            new User("Robin", "robin123@gmail.com"),
+            new User("Nancy", "123x@gmail.com"),
+            new User("Nancy2", "123x@gmail.com")
+    );
+
+    List<User> userList = users.stream()
+            .distinct()
+            .collect(Collectors.toList());
+    System.out.println(userList);
+
+    List<User> userListL = users.stream()
+            .limit(3)
+            .collect(Collectors.toList());
+    System.out.println(userListL);
+
+    List<User> userListS = users.stream()
+            .sorted(Comparator.comparingInt(u->u.email.length()))
+            .limit(2)
+            .collect(Collectors.toList());
+    userListS.forEach(System.out::println);
+    //System.out.println(userListS);
+
+    List<String> evenNumS = names.stream()
+            .skip(2)
+            .collect(Collectors.toList());
+    System.out.println(evenNumS);
+
+    System.out.println(names.stream()
+            .filter(name->name.startsWith("A"))
+            .peek(e -> System.out.println("Filtered value: "+e))
+            .map(String::toUpperCase)
+            .collect(Collectors.toList())
+    );
 }
