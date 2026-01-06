@@ -1,32 +1,13 @@
 void main() {
-    //1
-    List<Integer> nums = List.of(1, 2, 3, 4, 5, 6);
-    List<Integer> numsStream = nums.stream()
-            .filter(n->n%2!=0)
-            .map(n->n*2)
-            .collect(Collectors.toList());
-    System.out.println(numsStream);//2 6 10
+    //В исходном коде изменение одной стороны квадрата влияет на другую - это изменяет поведение базового класса
+    /*Rectangle rect = new Square();
+    rect.width = 3;
+    rect.height = 2;//width тоже меняется на 2
+    rect.area();//4, но ожидаем 6*/
 
-    //2
-    List<String> words = List.of("java", "python", "go", "java", "rust", "go");
-    List<String> wordsStream = words.stream()
-            .distinct()
-            .filter(n->n.length()>3)
-            .sorted()
-            .collect(Collectors.toList());
-    System.out.println(wordsStream);
+    Shape rectangle = new Rectangle(5, 9);
+    Shape square = new Square(8);
 
-    //3
-    List<User> users = List.of(
-            new User("Bob", 17),
-            new User("Mila", 22),
-            new User("Ilya", 31),
-            new User("Anna", 17)
-    );
-    Map<Integer, List<User>> usersStream = users.stream()
-            .collect(Collectors.groupingBy(User::age));
-    System.out.println(usersStream);
-
-    //дальше тяжело
-
+    System.out.println(rectangle.area());
+    System.out.println(square.area());
 }
