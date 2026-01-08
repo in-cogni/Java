@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -5,85 +6,94 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.sql.SQLOutput;
 import java.util.List;
-void main() throws IOException{
-    /*//старый подход
-    File file = new File("txt.txt");
-    if(file.exists()){
-        System.out.println("ok");
-    }
+void main(){
+    /*try(FileReader reader = new FileReader("")){
+        int c;
+        while((c=reader.read())!=-1){
 
-    //современный подход
-    Path path = Paths.get("txt.txt");
-    if(Files.exists(path)){
-        System.out.println("ok");
-    }*/
-
-    /*Path path = Paths.get("output.txt");
-    List<String> lines = Files.readAllLines(path);
-    for(String line: lines){
-        System.out.println(line);
-    }*/
-
-    /*//переход от старой версии к новой:
-    File file = new File("output.txt");
-    Path path1 = file.toPath();
-    File file1 = path1.toFile();
-    if(Files.exists(path1)){
-        System.out.println("ok"+Files.size(path1));
-    }*/
-
-    /*File file = new File("output.txt");
-    File folder = new File("src");
-
-    System.out.println(file.getAbsolutePath());
-    System.out.println(file.exists());
-    System.out.println(file.isFile());
-    System.out.println(folder.isDirectory());
-    System.out.println(folder.length());
-    System.out.println(folder.getName());*/
-
-    /*Path path1 = Paths.get("output.txt");
-    Path path2 = Paths.get("folder", "file.txt");
-    Path relative = path1.relativize(path2);
-    System.out.println(path1.toAbsolutePath());
-    System.out.println(path2.toAbsolutePath());
-    System.out.println(relative);*/
-
-    /*Path path1 = Paths.get("output.txt");
-    System.out.println(Files.exists(path1));
-    System.out.println(Files.isDirectory(path1));
-
-    if(Files.exists(path1)){
-        System.out.println("ok");
-    }*/
-
-    /*Path path1 = Paths.get("output.txt");
-    List<String> lines = Files.readAllLines(path1, StandardCharsets.UTF_8);
-    byte[] allBytes = Files.readAllBytes(path1);
-    System.out.println(allBytes.length);
-    System.out.println(lines);
-
-    for(String line: lines){
-        System.out.println(line);
-    }*/
-
-    /*Path path1 = Paths.get("output.txt");
-    List<String> list = Arrays.asList(
-            "C:\\Users\\Lenovo\\.jdks\\openjdk-25.0.1\\bin\\java.exe"
-    );
-    byte[] data = {1,2,3,4,5};
-    Files.write(path1, data);
-    Files.write(path1, list, StandardOpenOption.APPEND, StandardOpenOption.CREATE);//добавляет в конец и в случае отстутсвия файла создает его
-    Files.write(path1, list, StandardOpenOption.APPEND, StandardOpenOption.CREATE_NEW);//создает файл всегда и добавляет в него текст
-    Files.write(path1, list, StandardOpenOption.TRUNCATE_EXISTING);//очищает полностью
-    System.out.println();*/
-
-    //работа с очень большими файлами
-    Path path1 = Paths.get("output.txt");
-    try(BufferedReader reader = Files.newBufferedReader(path1)){
-        String line;
-        while((line = reader.readLine())!=null){
-            System.out.println(line);
         }
+    }*/
+    /*String filename = "output.txt";
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Enter string");
+    String entry = scanner.nextLine();*/
+
+    /*//try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))){//true - означает добавлять новое, не перезаписывать
+    try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true), 7655)){
+    //try(BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"))){
+        writer.write(entry);
+        writer.newLine();
+        System.out.println("Ok");
+        writer.flush();
+    }catch(IOException e){
+        System.out.println("Error "+e.getMessage());
+    }*/
+
+    /*Path path = Path.of(filename);
+    try{
+        //маленькие и средние файлы. список строк
+        List<String> lines = Files.readAllLines(path);
+        for(int i=0; i<lines.size();i++){
+            System.out.printf("%3d: %s%n", i+1, lines.get(i));
+        }
+        //маленькие файлы и нужен весь текст(нет разбивки на строки)
+        String content = Files.readString(path, StandardCharsets.UTF_8);
+        System.out.println(content);
+    }catch (IOException e){
+        System.out.println("Error "+e.getMessage());
+    }*/
+//большие файлы, чтение по строкам
+    /*try(BufferedReader reader = new BufferedReader(new FileReader(filename))){
+        String line;
+        int lineNumber = 1;
+        while((line=reader.readLine())!=null){
+            System.out.printf("%3d: %s%n", lineNumber, line);
+            lineNumber++;
+        }
+    }catch(IOException e){
+        System.out.println("Error "+e.getMessage());
+    }*/
+
+    /*String source = "smesharick.jpg";
+    String dest = "smesharick_copy.jpg";
+    try(FileInputStream in = new FileInputStream(source);
+        FileOutputStream out = new FileOutputStream(dest)){
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        while((bytesRead=in.read(buffer))!=-1){
+            out.write(buffer, 0, bytesRead);
+        }
+        System.out.println("Ok");
+    }catch (IOException e){
+        System.out.println("Error "+e.getMessage());
+    }*/
+
+    String filename = "savegame.bin";
+    /*String playerName = "Alex";
+    int score = 12345;
+    double recordTime = 67.5;
+    boolean isWinner = true;
+
+    try(DataOutputStream dos = new DataOutputStream(new FileOutputStream(filename))){
+        dos.writeUTF(playerName);
+        dos.writeInt(score);
+        dos.writeDouble(recordTime);
+        dos.writeBoolean(isWinner);
+        System.out.println("Ok");
+    }catch (IOException e){
+        System.out.println("Error "+e.getMessage());
+    }*/
+
+    try(DataInputStream dis = new DataInputStream(new FileInputStream(filename))){
+        String playerName = dis.readUTF();
+        int score = dis.readInt();
+        double recordTime = dis.readDouble();
+        boolean isWinner = dis.readBoolean();
+        System.out.println(playerName);
+        System.out.println(score);
+        System.out.println(recordTime);
+        System.out.println(isWinner);
+    }catch (IOException e){
+        System.out.println("Error "+e.getMessage());
     }
 }
