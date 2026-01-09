@@ -7,93 +7,91 @@ import java.nio.file.Files;
 import java.sql.SQLOutput;
 import java.util.List;
 void main(){
-    /*try(FileReader reader = new FileReader("")){
-        int c;
-        while((c=reader.read())!=-1){
-
+    //долго
+    /*try(InputStream in = new FileInputStream("")){
+        int b;
+        while((b=in.read())!=-1){
+            //
         }
     }*/
-    /*String filename = "output.txt";
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Enter string");
-    String entry = scanner.nextLine();*/
 
-    /*//try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))){//true - означает добавлять новое, не перезаписывать
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true), 7655)){
-    //try(BufferedWriter writer = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"))){
-        writer.write(entry);
-        writer.newLine();
-        System.out.println("Ok");
-        writer.flush();
-    }catch(IOException e){
-        System.out.println("Error "+e.getMessage());
-    }*/
+    long start = System.currentTimeMillis();
+    try(FileInputStream in = new FileInputStream("output.txt")){
+        int b;
+        while((b=in.read())!=-1){
+            //
+        }
+    }catch (IOException e){
+        System.out.println(e.getMessage());
+    }
+    long end = System.currentTimeMillis();
+    System.out.println("Чтение по одному байту "+(end-start)+" ms");
 
-    /*Path path = Path.of(filename);
+    long startB = System.currentTimeMillis();
+    try(BufferedInputStream in = new BufferedInputStream(new FileInputStream("output.txt"))){
+        int b;
+        while((b=in.read())!=-1){
+            //
+        }
+    }catch (IOException e){
+        System.out.println(e.getMessage());
+    }
+    long endB = System.currentTimeMillis();
+    System.out.println("Чтение с буффером "+(endB-startB)+" ms");
+
+    try(RandomAccessFile file = new RandomAccessFile("output.txt", "r")){
+        FileChannel channel = file.getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        int byteRead = channel.read(buffer);
+        while(byteRead!=-1){
+            buffer.flip();
+            while(buffer.hasRemaining()){
+                System.out.println((char) buffer.get());
+            }
+            buffer.clear();
+            byteRead = channel.read(buffer);
+        }
+    }catch (IOException e){
+        System.out.println(e.getMessage());
+    }
+
+    try(RandomAccessFile file = new RandomAccessFile("output.txt", "rw")){
+        FileChannel channel = file.getChannel();
+        ByteBuffer buffer = ByteBuffer.wrap("skljd".getBytes());
+        channel.write(buffer);
+        channel.position(100);
+        channel.truncate(1024);
+        buffer.capacity();
+        buffer.limit();
+        buffer.mark();
+        buffer.clear();
+    }catch (IOException e){
+        System.out.println(e.getMessage());
+    }
+
     try{
-        //маленькие и средние файлы. список строк
-        List<String> lines = Files.readAllLines(path);
-        for(int i=0; i<lines.size();i++){
-            System.out.printf("%3d: %s%n", i+1, lines.get(i));
-        }
-        //маленькие файлы и нужен весь текст(нет разбивки на строки)
-        String content = Files.readString(path, StandardCharsets.UTF_8);
-        System.out.println(content);
-    }catch (IOException e){
-        System.out.println("Error "+e.getMessage());
-    }*/
-//большие файлы, чтение по строкам
-    /*try(BufferedReader reader = new BufferedReader(new FileReader(filename))){
-        String line;
-        int lineNumber = 1;
-        while((line=reader.readLine())!=null){
-            System.out.printf("%3d: %s%n", lineNumber, line);
-            lineNumber++;
-        }
-    }catch(IOException e){
-        System.out.println("Error "+e.getMessage());
-    }*/
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.put((byte) 42);
+        buffer.flip();
+        byte value = buffer.get();
+        buffer.clear();
+    }catch (Exception e){
+        System.out.println(e.getMessage());
+    }
 
-    /*String source = "smesharick.jpg";
-    String dest = "smesharick_copy.jpg";
-    try(FileInputStream in = new FileInputStream(source);
-        FileOutputStream out = new FileOutputStream(dest)){
-        byte[] buffer = new byte[8192];
-        int bytesRead;
-        while((bytesRead=in.read(buffer))!=-1){
-            out.write(buffer, 0, bytesRead);
-        }
-        System.out.println("Ok");
+    try(FileChannel src = FileChannel.open(Paths.get("output.txt"), StandardOpenOption.READ);
+        FileChannel dst = FileChannel.open(Paths.get("input.txt"), StandardOpenOption.CREATE)){
+        long size = src.size();
+        long transfer = src.transferTo(0, size, dst);
     }catch (IOException e){
-        System.out.println("Error "+e.getMessage());
-    }*/
+        System.out.println(e.getMessage());
+    }
 
-    String filename = "savegame.bin";
-    /*String playerName = "Alex";
-    int score = 12345;
-    double recordTime = 67.5;
-    boolean isWinner = true;
-
-    try(DataOutputStream dos = new DataOutputStream(new FileOutputStream(filename))){
-        dos.writeUTF(playerName);
-        dos.writeInt(score);
-        dos.writeDouble(recordTime);
-        dos.writeBoolean(isWinner);
-        System.out.println("Ok");
+    try(FileChannel raf = FileChannel.open(Paths.get(""), StandardOpenOption.READ)){
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        raf.position();
+        int byteRead = raf.read(byteBuffer);
     }catch (IOException e){
-        System.out.println("Error "+e.getMessage());
-    }*/
-
-    try(DataInputStream dis = new DataInputStream(new FileInputStream(filename))){
-        String playerName = dis.readUTF();
-        int score = dis.readInt();
-        double recordTime = dis.readDouble();
-        boolean isWinner = dis.readBoolean();
-        System.out.println(playerName);
-        System.out.println(score);
-        System.out.println(recordTime);
-        System.out.println(isWinner);
-    }catch (IOException e){
-        System.out.println("Error "+e.getMessage());
+        System.out.println(e.getMessage());
     }
 }
