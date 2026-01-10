@@ -7,91 +7,83 @@ import java.nio.file.Files;
 import java.sql.SQLOutput;
 import java.util.List;
 void main(){
-    //долго
-    /*try(InputStream in = new FileInputStream("")){
-        int b;
-        while((b=in.read())!=-1){
-            //
+    MyAction action = ()-> System.out.println("Hello");
+    action.run();
+
+    //Predicate
+    //Consumer
+    //Supplier
+    //Function
+
+    Predicate<String> isLong = s->s.length()>5;
+    System.out.println(isLong.test("Java"));
+    System.out.println(isLong.test("Hello6"));
+
+    Consumer<String> printer = s-> System.out.println("Printing"+s);
+    printer.accept("Java");
+
+    Supplier<Double> randomSup = ()->Math.random();
+    System.out.println(randomSup.get());
+
+    Function<String, Integer> stringToLength = s->s.length();
+    System.out.println(stringToLength.apply("Hello"));
+
+    //UnaryOperator
+    //BiFunctions
+
+    //List<String> words = List.of("java", "", "stream", "lambda", "code");
+    List<String> words = new ArrayList<>(Arrays.asList( "", "stream", "lambda", "code"));
+    List<String> longWords = words.stream()
+            .filter(word->word.length()>4)
+            .toList();
+    System.out.println(longWords);
+
+    Predicate<String> isShort = s->s.length()<5;
+
+    //(параметры)->{тело}
+    //(a, b)->{a+b};
+
+    Runnable r = ()-> System.out.println("Hello");
+    r.run();
+
+    Consumer<String> print = s-> System.out.println(s);
+    print.accept("Jaava");
+
+    Function<Integer, Integer> abc = x->{
+        if(x<0){
+            return -x;
         }
-    }*/
+        return x;
+    };
+    System.out.println(abc.apply(-3));
 
-    long start = System.currentTimeMillis();
-    try(FileInputStream in = new FileInputStream("output.txt")){
-        int b;
-        while((b=in.read())!=-1){
-            //
-        }
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
-    long end = System.currentTimeMillis();
-    System.out.println("Чтение по одному байту "+(end-start)+" ms");
+    Thread t = new Thread(()-> System.out.println("Start"));
+    t.start();
 
-    long startB = System.currentTimeMillis();
-    try(BufferedInputStream in = new BufferedInputStream(new FileInputStream("output.txt"))){
-        int b;
-        while((b=in.read())!=-1){
-            //
-        }
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
-    long endB = System.currentTimeMillis();
-    System.out.println("Чтение с буффером "+(endB-startB)+" ms");
+    List<String> longWord = words.stream()
+            .filter(s->s.length()>5)
+            .collect(Collectors.toList());
+    System.out.println(longWord);
 
-    try(RandomAccessFile file = new RandomAccessFile("output.txt", "r")){
-        FileChannel channel = file.getChannel();
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int byteRead = channel.read(buffer);
-        while(byteRead!=-1){
-            buffer.flip();
-            while(buffer.hasRemaining()){
-                System.out.println((char) buffer.get());
-            }
-            buffer.clear();
-            byteRead = channel.read(buffer);
-        }
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    String name = "Java";
 
-    try(RandomAccessFile file = new RandomAccessFile("output.txt", "rw")){
-        FileChannel channel = file.getChannel();
-        ByteBuffer buffer = ByteBuffer.wrap("skljd".getBytes());
-        channel.write(buffer);
-        channel.position(100);
-        channel.truncate(1024);
-        buffer.capacity();
-        buffer.limit();
-        buffer.mark();
-        buffer.clear();
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    Example example = new Example();
 
-    try{
-        ByteBuffer buffer = ByteBuffer.allocate(8);
-        buffer.put((byte) 42);
-        buffer.flip();
-        byte value = buffer.get();
-        buffer.clear();
-    }catch (Exception e){
-        System.out.println(e.getMessage());
-    }
+    words.forEach(s-> System.out.println(s));
+    words.forEach(System.out::println);
+    words.removeIf(s->s.isEmpty());
+    System.out.println(words);
 
-    try(FileChannel src = FileChannel.open(Paths.get("output.txt"), StandardOpenOption.READ);
-        FileChannel dst = FileChannel.open(Paths.get("input.txt"), StandardOpenOption.CREATE)){
-        long size = src.size();
-        long transfer = src.transferTo(0, size, dst);
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    words.stream()
+            .filter(s->s.length()>3)
+            .forEach(System.out::println);
 
-    try(FileChannel raf = FileChannel.open(Paths.get(""), StandardOpenOption.READ)){
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-        raf.position();
-        int byteRead = raf.read(byteBuffer);
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    List<String> upper = words.stream()
+            .map(s->s.toUpperCase())
+            .collect(Collectors.toList());
+    System.out.println(upper);
+
 }
+
+
+
