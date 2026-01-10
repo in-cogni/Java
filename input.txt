@@ -1,2 +1,0 @@
-this is a file input.txt
-hello world

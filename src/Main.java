@@ -1,32 +1,29 @@
 void main() {
     //1
-    try(FileChannel channel = FileChannel.open(Paths.get("input.txt"), StandardOpenOption.READ)){
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int byteRead = channel.read(buffer);
-        while (byteRead!=-1){
-            buffer.flip();
-            while (buffer.hasRemaining()){
-                System.out.print((char) buffer.get());
-            }
-            buffer.clear();
-            byteRead = channel.read(buffer);
-        }
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    List<Integer> list = List.of(1, 2, 3, 4);
+    int result = 0;
+    List<Integer> resultList = list.stream()
+            .filter(s->s%2==0)
+            .map(s->s*s)
+            .collect(Collectors.toList());
+    System.out.println(resultList);
+    System.out.println(resultList.stream().mapToInt(Integer::intValue).sum());
 
     //2
-    try(FileChannel src = FileChannel.open(Paths.get("source.bin"), StandardOpenOption.READ);
-        FileChannel dst = FileChannel.open(Paths.get("copy.bin"), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)){
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int byteRead = src.read(buffer);
-        while(byteRead!=-1){
-            buffer.flip();
-            dst.write(buffer);
-            buffer.clear();
-            byteRead = src.read(buffer);
-        }
-    }catch (IOException e){
-        System.out.println(e.getMessage());
-    }
+    List<Person> person = List.of(
+            new Person("Mike", "New-York", 34),
+            new Person("Joe", "Panama", 29),
+            new Person("Joe", "Panama", 21),
+            new Person("Joe", "LA", 12),
+            new Person("Jimmy", "Moscow", 9)
+    );
+
+    Map<String, Double> filtered = person.stream()
+            .filter(s->s.age>18)
+            .collect(Collectors.groupingBy(
+                    p->p.city,
+                    Collectors.averagingDouble(p->p.age)
+            ));
+    System.out.println(filtered);
+
 }
