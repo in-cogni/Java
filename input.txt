@@ -1,3 +1,2 @@
-new text
-joe
-0point
+this is a file input.txt
+hello world
