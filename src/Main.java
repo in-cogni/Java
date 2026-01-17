@@ -9,46 +9,144 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.sql.SQLOutput;
 import java.util.List;
-void main(){
-    JButton button = new JButton("Нажми меня");
-    JFrame frame = new JFrame("Пример события");
-    JLabel label = new JLabel("Нажатий: 0");
-    final int[] count = {0};
-    //Отдельный файл
-    //button.addActionListener(new MyActionListener());
-    //Анонимный класс
-    button.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            count[0]++;
-            label.setText("Нажатий "+count[0]);
+//static int counter = 0;
+void main() throws InterruptedException{
+    //без потоков:
+    /*for(int i=0; i<=5;i++){
+        System.out.println(i);
+    }
+    for(char c= 'A'; c<='E';c++){
+        System.out.println(c);
+    }*/
+
+    //с потоками:
+    /*Thread num = new Thread(()->{
+        for(int i=0; i<=5;i++){
+            System.out.println(i);
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                //
+            }
         }
     });
-    /*button.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            System.out.println("Mouse is clicked");
+    Thread letters = new Thread(()->{
+        for(char c= 'A'; c<='E';c++){
+            System.out.println(c);
+            try{
+                Thread.sleep(1000);
+            }catch (InterruptedException e){
+                //
+            }
         }
-    });*/
-    /*button.addKeyListener(new KeyAdapter() {
+    });
+    num.start();
+    letters.start();*/
+
+    //1 вариант: неудобен, тк класс наследуется от потока и больше не может наследоваться extends
+    /*HelloThread thread = new HelloThread();
+    thread.start();
+    System.out.println("Main thread closed");*/
+
+    //2 вариант: класс наследуется от интерфейса и в дальшем может наследоваться от extends
+    /*Runnable runnable = new HelloThread();
+    Thread thread= new Thread(runnable);
+    thread.start();
+    System.out.println("Main thread closed");*/
+
+    //3 вариант: без создания отдельного класса
+    /*Thread thread = new Thread(new Runnable() {
         @Override
-        public void keyPressed(KeyEvent e) {
-            System.out.println(e.getKeyChar());
+        public void run() {
+            System.out.println("Anonim class Thread "+ Thread.currentThread().getName());
         }
-    });*/
-    /*frame.setLayout(new FlowLayout());
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//завершает программу при нажатии на крестик
-    frame.add(button);
-    frame.add(label);
-    frame.setSize(400, 100);
-    frame.setVisible(true);*/
+    });
+    thread.start();
+    System.out.println("Main thread closed");*/
 
-    DataLoader loader = new DataLoader();
-    DataLoadedHandler handler = new DataLoadedHandler();
-    loader.addDataLoaded(handler);
-    loader.loadData();
-    loader.removeDataLoader(handler);
+    /*Thread thread = new Thread(()->{
+        System.out.println("run() for thread "+ Thread.currentThread().getName());
+    });
+    thread.run();//в main
+    thread.start();//новый поток*/
 
+    /*Thread thread = new Thread(()->{
+        System.out.println("Worked...");
+        try{
+            Thread.sleep(1000);
+        }catch (InterruptedException e){}
+        System.out.println("Done");
+    });
+    thread.start();
+    System.out.println("Wait thread ...");
+    try{
+        thread.join();
+    }catch (InterruptedException e){}
+    System.out.println("Thread closed");*/
+
+    /*Thread thread = new Thread(()->{
+        while(!Thread.currentThread().isInterrupted()){
+            //work
+        }
+        System.out.println("Поток завершен по прерыванию");
+    });
+    thread.start();
+    thread.interrupt();*/
+
+    /*Thread t = new Thread(()->{
+        System.out.println("hello");
+    });
+    System.out.println(t.getState());
+    t.start();
+    System.out.println(t.getState());
+    try{
+        t.join();
+    }catch (InterruptedException e){}
+    System.out.println(t.getState());*/
+
+    /*Thread t = new Thread(()->{
+        try{
+            System.out.println("Sleep");
+            Thread.sleep(1000);//TIME_WAITING
+            System.out.println("Wake up");
+        }catch (InterruptedException e){
+            System.out.println("Canceled");
+        }
+    });
+    System.out.println(t.getState());
+    t.start();
+    System.out.println(t.getState());*/
+
+    /*int threads = 1000;
+    Thread[] threadArray = new Thread[threads];
+    for(int i=0;i<threads;i++) {
+        threadArray[i]=new Thread(()->{
+            counter++;
+        });
+        threadArray[i].start();
+    }
+    for(int i=0;i<threads;i++){
+        threadArray[i].join();
+    }
+    System.out.println("Wait "+threads);//Ожидалось
+    System.out.println("Count "+counter);//Получили*/
+
+    Counter counter = new Counter();
+    Thread t1 = new Thread(()->{
+        for(int i=0; i<10000; i++){
+            counter.increment();
+        }
+    });
+    Thread t2= new Thread(()->{
+        for(int i=0; i<10000; i++){
+            counter.increment();
+        }
+    });
+    t1.start();
+    t2.start();
+    t1.join();
+    t2.join();
+    System.out.println(counter.count);
 }
 
 
