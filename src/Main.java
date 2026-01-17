@@ -1,29 +1,85 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 void main() {
     //1
-    List<Integer> list = List.of(1, 2, 3, 4);
-    int result = 0;
-    List<Integer> resultList = list.stream()
-            .filter(s->s%2==0)
-            .map(s->s*s)
-            .collect(Collectors.toList());
-    System.out.println(resultList);
-    System.out.println(resultList.stream().mapToInt(Integer::intValue).sum());
+    /*Random random = new Random();
+    JFrame frame = new JFrame("Random number");
+    JButton button = new JButton("Generate");
+    JLabel label = new JLabel();
+    final int[] number={0};
+
+    button.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            number[0] = random.nextInt(100)+1;
+            label.setText(number[0]+"");
+        }
+    });
+    frame.setLayout(new FlowLayout());
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.add(button);
+    frame.add(label);
+    frame.setSize(400, 100);
+    frame.setLocationRelativeTo(null);
+    frame.setVisible(true);*/
 
     //2
-    List<Person> person = List.of(
-            new Person("Mike", "New-York", 34),
-            new Person("Joe", "Panama", 29),
-            new Person("Joe", "Panama", 21),
-            new Person("Joe", "LA", 12),
-            new Person("Jimmy", "Moscow", 9)
-    );
+    JFrame frame = new JFrame("Form of registration");
+    JLabel nameLabel = new JLabel("Name: ");
+    JTextField nameField = new JTextField(10);
+    JLabel ageLabel = new JLabel("Age: ");
+    JTextField ageField = new JTextField(10);
+    JButton button = new JButton("Submit");
+    JLabel label = new JLabel();
 
-    Map<String, Double> filtered = person.stream()
-            .filter(s->s.age>18)
-            .collect(Collectors.groupingBy(
-                    p->p.city,
-                    Collectors.averagingDouble(p->p.age)
-            ));
-    System.out.println(filtered);
+    frame.setLayout(new FlowLayout());
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.add(nameLabel);
+    frame.add(nameField);
+    frame.add(ageLabel);
+    frame.add(ageField);
+    frame.add(button);
+    frame.add(label);
+    frame.setSize(400, 100);
+    frame.setLocationRelativeTo(null);
+    frame.setVisible(true);
+
+    button.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name = nameField.getText().trim();
+            String ageText = ageField.getText();
+
+            if(name.isEmpty()){
+                label.setText("Name is empty");
+                label.setForeground(Color.RED);
+                return;
+            }
+            if(ageText.isEmpty()){
+                label.setText("Age is empty");
+                label.setForeground(Color.RED);
+                return;
+            }
+            int age;
+            try{
+                age= Integer.parseInt(ageText);
+            }catch (NumberFormatException ex){
+                label.setText(ex.getMessage());
+                label.setForeground(Color.RED);
+                return;
+            }
+            if(age<0){
+                label.setText("Age < 0");
+                label.setForeground(Color.RED);
+                return;
+            }
+            label.setText("User: "+name+", age: "+age);
+            label.setForeground(Color.GREEN);
+        }
+    });
+
 
 }
