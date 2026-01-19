@@ -3,83 +3,54 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-void main() {
+void main() throws InterruptedException {
     //1
-    /*Random random = new Random();
-    JFrame frame = new JFrame("Random number");
-    JButton button = new JButton("Generate");
-    JLabel label = new JLabel();
-    final int[] number={0};
+    /*Printer printer = new Printer();
 
-    button.addActionListener(new ActionListener() {
+    Runnable printTask = new Runnable() {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            number[0] = random.nextInt(100)+1;
-            label.setText(number[0]+"");
+        public void run() {
+            printer.print("Message for threads");
         }
-    });
-    frame.setLayout(new FlowLayout());
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.add(button);
-    frame.add(label);
-    frame.setSize(400, 100);
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);*/
+    };
+    Thread t1 = new Thread(printTask);
+    Thread t2 = new Thread(printTask);
+    t1.start();
+    t2.start();*/
 
     //2
-    JFrame frame = new JFrame("Form of registration");
-    JLabel nameLabel = new JLabel("Name: ");
-    JTextField nameField = new JTextField(10);
-    JLabel ageLabel = new JLabel("Age: ");
-    JTextField ageField = new JTextField(10);
-    JButton button = new JButton("Submit");
-    JLabel label = new JLabel();
-
-    frame.setLayout(new FlowLayout());
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.add(nameLabel);
-    frame.add(nameField);
-    frame.add(ageLabel);
-    frame.add(ageField);
-    frame.add(button);
-    frame.add(label);
-    frame.setSize(400, 100);
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
-
-    button.addActionListener(new ActionListener() {
+    Stop stop = new Stop();
+    Thread t3 = new Thread(new Runnable() {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            String name = nameField.getText().trim();
-            String ageText = ageField.getText();
-
-            if(name.isEmpty()){
-                label.setText("Name is empty");
-                label.setForeground(Color.RED);
-                return;
+        public void run() {
+            while(stop.running){
+                System.out.println("t3 is working");
+                try{
+                    Thread.sleep(1000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
-            if(ageText.isEmpty()){
-                label.setText("Age is empty");
-                label.setForeground(Color.RED);
-                return;
-            }
-            int age;
-            try{
-                age= Integer.parseInt(ageText);
-            }catch (NumberFormatException ex){
-                label.setText(ex.getMessage());
-                label.setForeground(Color.RED);
-                return;
-            }
-            if(age<0){
-                label.setText("Age < 0");
-                label.setForeground(Color.RED);
-                return;
-            }
-            label.setText("User: "+name+", age: "+age);
-            label.setForeground(Color.GREEN);
+            System.out.println("Stopped");
         }
     });
 
+    Thread t4 = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try{
+                Thread.sleep(5000);
+                stop.running = false;
+                System.out.println("Stop");
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    });
 
+    t3.start();
+    t4.start();
+
+    t3.join();
+    t4.join();
 }
